@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MobileContactDAOImpl implements IMobileContactDAO {
-    private static final List<MobileContact> contacts = new ArrayList<MobileContact>(); // Constructor. Δεν χρειάζεται να πούμε πάλι MobileContact μέσα στο ArrayList
+    private static final List<MobileContact> contacts = new ArrayList<>(); // Constructor. Δεν χρειάζεται να πούμε πάλι MobileContact μέσα στο ArrayList
+    private static Long id = 1L;
+
     @Override
     public MobileContact insert(MobileContact mobileContact) {
+        mobileContact.setId(id++);
         contacts.add(mobileContact);
         return mobileContact;
     }
@@ -21,37 +24,42 @@ public class MobileContactDAOImpl implements IMobileContactDAO {
 
     @Override
     public void deleteById(Long id) {
-
+//      contacts.remove(getIndexById(id));
+        contacts.removeIf(contact -> contact.getId().equals(id));  // iterated λογική της for
     }
 
     @Override
     public MobileContact getById(Long id) {
-        return null;
+        int positionToReturn = getIndexById(id);
+        return (positionToReturn != -1) ? contacts.get(positionToReturn) : null;  // use case τριαδικού στο return (αντι για ifs)
     }
 
     @Override
     public List<MobileContact> getAll() {
-        return List.of();
+        return new ArrayList<>(contacts);
     }
 
     @Override
     public void deleteByPhoneNumber(String phoneNumber) {
-
+        contacts.removeIf(contacts -> contacts.getPhoneNumber().equals(phoneNumber));
     }
 
     @Override
     public MobileContact getByPhoneNumber(String phoneNumber) {
-        return null;
+        int positionToReturn = getIndexByPhoneNumber(phoneNumber);
+        return (positionToReturn != -1) ? contacts.get(positionToReturn) : null;
     }
 
     @Override
     public boolean userIdExists(Long id) {
-        return false;
+        int position = getIndexById(id);
+        return position != -1;
     }
 
     @Override
     public boolean phoneNumberExists(String phoneNumber) {
-        return false;
+        int position = getIndexByPhoneNumber(phoneNumber);
+        return position != -1;
     }
 
     private int getIndexById(Long id) {
@@ -59,6 +67,18 @@ public class MobileContactDAOImpl implements IMobileContactDAO {
 
         for (int i = 0; i < contacts.size(); i++) {
             if (contacts.get(i).getId().equals(id)) {
+                positionToReturn = i;
+                break;
+            }
+        }
+        return positionToReturn;
+    }
+
+    private int getIndexByPhoneNumber(String phoneNumber) {
+        int positionToReturn = -1;
+
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).getPhoneNumber().equals(phoneNumber)) {
                 positionToReturn = i;
                 break;
             }

@@ -6,12 +6,12 @@ import java.util.List;
 
 /**
  * DAO = Data access objects - Κάνουμε ένα Public API
- * το οποίο έχει μεθόδους
+ * το οποίο έχει Public μεθόδους
  * CRUD ( INSERT UPDATE DELETE SELECT )
  */
 public interface IMobileContactDAO {
 
-    // Βασικά (INSERT, UPDATE, DELETE, SELECT)
+    // Βασικά (INSERT, UPDATE, DELETE, SELECT) - trivial
     MobileContact insert(MobileContact mobileContact);
     MobileContact update(Long id, MobileContact mobileContact);
     void deleteById(Long id);
