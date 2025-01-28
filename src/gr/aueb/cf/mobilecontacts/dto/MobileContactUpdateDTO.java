@@ -1,6 +1,4 @@
-package gr.aueb.cf.mobilecontacts;
-
-import gr.aueb.cf.mobilecontacts.dto.BaseDTO;
+package gr.aueb.cf.mobilecontacts.dto;
 
 public class MobileContactUpdateDTO extends BaseDTO {
     private String firstname;
