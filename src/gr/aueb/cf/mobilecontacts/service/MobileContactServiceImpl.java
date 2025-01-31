@@ -5,11 +5,12 @@ import gr.aueb.cf.mobilecontacts.dto.MobileContactInsertDTO;
 import gr.aueb.cf.mobilecontacts.dto.MobileContactUpdateDTO;
 import gr.aueb.cf.mobilecontacts.exceptions.ContactNotFoundException;
 import gr.aueb.cf.mobilecontacts.exceptions.PhoneNumberAlreadyExistsException;
+import gr.aueb.cf.mobilecontacts.mapper.Mapper;
 import gr.aueb.cf.mobilecontacts.model.MobileContact;
 
 import java.util.List;
 
-public class MobileContactServiceImpl implements IMobileContactService{
+public class MobileContactServiceImpl implements IMobileContactService {
 
     public MobileContactServiceImpl(IMobileContactDAO dao) {
         this.dao = dao;
@@ -26,7 +27,7 @@ public class MobileContactServiceImpl implements IMobileContactService{
                 throw new PhoneNumberAlreadyExistsException("Contact with phone number " + dto.getPhoneNumber() + " already exists.");
             }
 
-            mobileContact = mapInsertDTOToContact(dto);
+            mobileContact = Mapper.mapInsertDTOToContact(dto);
 
             System.err.printf("MobileContactServiceImpl Logger: %s was inserted\n", mobileContact);
             return dao.insert(mobileContact);
@@ -54,11 +55,11 @@ public class MobileContactServiceImpl implements IMobileContactService{
             boolean isPhoneNumberExists = dao.phoneNumberExists(dto.getPhoneNumber());
 
             if (isPhoneNumberExists && isPhoneNumberOurOwn) {
-                throw new PhoneNumberAlreadyExistsException("Contact with phone number: " +  dto.getPhoneNumber()
+                throw new PhoneNumberAlreadyExistsException("Contact with phone number: " + dto.getPhoneNumber()
                         + " already exists and can not be updated.");
             }
 
-            newContact = mapUpdateDTOToContact(dto);
+            newContact = Mapper.mapUpdateDTOToContact(dto);
             System.err.printf("MobileContactServiceImpl Logger: %s was updated with the new info: %s\n", mobileContact, newContact);
             return dao.update(dto.getId(), newContact);
 
@@ -137,14 +138,5 @@ public class MobileContactServiceImpl implements IMobileContactService{
             System.err.printf("MobileContactServiceImpl Logger: %s\n", e.getMessage());
             throw e;
         }
-    }
-
-
-    private MobileContact mapInsertDTOToContact(MobileContactInsertDTO dto) {   // MAPPING αντιστοιχούμε αυτά που έχει το DTO
-        return new MobileContact(null, dto.getFirstname(), dto.getLastname(), dto.getPhoneNumber());
-    }
-
-    private MobileContact mapUpdateDTOToContact(MobileContactUpdateDTO dto) {   // MAPPING αντιστοιχούμε αυτά που έχει το DTO
-        return new MobileContact(dto.getId(), dto.getFirstname(), dto.getLastname(), dto.getPhoneNumber());
     }
 }

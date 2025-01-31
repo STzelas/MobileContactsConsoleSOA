@@ -14,7 +14,7 @@ public class ValidationUtil {
     }
 
     public static String validateDTO(MobileContactInsertDTO insertDTO) {
-        String errorResponse = " ";
+        String errorResponse = "";
 
         if (insertDTO.getPhoneNumber().length() <= 5)
             errorResponse += "Ο τηλεφωνικός αριθμός πρέπει να έχει περισσότερα από 5 σύμβολα.\n";
@@ -26,7 +26,7 @@ public class ValidationUtil {
     }
 
     public static String validateDTO(MobileContactUpdateDTO updateDTO) {
-        String errorResponse = " ";
+        String errorResponse = "";
 
         if (updateDTO.getPhoneNumber().length() <= 5)
             errorResponse += "Ο τηλεφωνικός αριθμός πρέπει να έχει περισσότερα από 5 σύμβολα.\n";
