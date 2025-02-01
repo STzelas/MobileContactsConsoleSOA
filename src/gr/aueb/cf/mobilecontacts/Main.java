@@ -1,8 +1,14 @@
 package gr.aueb.cf.mobilecontacts;
 
 import gr.aueb.cf.mobilecontacts.controller.MobileContactController;
+import gr.aueb.cf.mobilecontacts.dto.BaseDTO;
 import gr.aueb.cf.mobilecontacts.dto.MobileContactInsertDTO;
+import gr.aueb.cf.mobilecontacts.dto.MobileContactReadOnlyDTO;
+import gr.aueb.cf.mobilecontacts.dto.MobileContactUpdateDTO;
+import gr.aueb.cf.mobilecontacts.model.MobileContact;
+import gr.aueb.cf.mobilecontacts.service.MobileContactServiceImpl;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {
@@ -31,7 +37,7 @@ public class Main {
         String lastname;
         String phoneNumber;
         String response;
-
+        MobileContact mobileContact = new MobileContact();
 
         switch (choice) {
             case "1":
@@ -54,10 +60,30 @@ public class Main {
                 //
                 break;
             case "3":
-                //
+                System.out.println("Παρακαλώ εισάγετε το τηλέφωνο της επαφής που θέλετε να διαγράψετε");
+                phoneNumber = getToken();
+                response = controller.deleteContactByPhoneNumber(phoneNumber);
+                if (response.startsWith("OK")) {
+                    System.out.println("Επιτυχής διαγραφή");
+                    System.out.println(response.substring(3));
+
+                } else {
+                    System.out.println("Ανεπιτυχής διαγραφή");
+                    System.out.println(response.substring(7));
+                }
                 break;
             case "4":
-                //
+                System.out.println("Παρακαλώ εισάγετε το τηλέφωνο της επαφής που θέλετε να αναζητήσετε");
+                phoneNumber = getToken();
+                response = controller.getContactByPhoneNumber(phoneNumber);
+                if (response.startsWith("OK")) {
+                    System.out.println("Επιτυχής αναζήτηση");
+                    System.out.println(response.substring(3));
+
+                } else {
+                    System.out.println("Ανεπιτυχής αναζήτηση");
+                    System.out.println(response.substring(7));
+                }
                 break;
             case "5":
                 //

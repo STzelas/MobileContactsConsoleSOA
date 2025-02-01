@@ -57,9 +57,7 @@ public class MobileContactController {
             mobileContact = service.updateMobileContact(updateDTO);
             readOnlyDTO = Mapper.mapMobileContactToDTO(mobileContact);
             return "OK\n" + Serializer.serializeDTO(readOnlyDTO);
-        } catch (PhoneNumberAlreadyExistsException  e) {
-            return "Error.\n" + e.getMessage() + "\n";
-        } catch (ContactNotFoundException e) {
+        } catch (PhoneNumberAlreadyExistsException | ContactNotFoundException e) {
             return "Error.\n" + e.getMessage() + "\n";
         }
     }
