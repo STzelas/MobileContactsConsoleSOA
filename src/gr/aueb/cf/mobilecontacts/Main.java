@@ -9,6 +9,7 @@ import gr.aueb.cf.mobilecontacts.model.MobileContact;
 import gr.aueb.cf.mobilecontacts.service.MobileContactServiceImpl;
 
 import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -37,7 +38,7 @@ public class Main {
         String lastname;
         String phoneNumber;
         String response;
-        MobileContact mobileContact = new MobileContact();
+        long id;
 
         switch (choice) {
             case "1":
@@ -57,12 +58,32 @@ public class Main {
                 }
                 break;
             case "2":
-                //
+                System.out.println("Εισάγετε Αριθμό Τηλεφώνου");
+                phoneNumber = getToken();
+                response = controller.getContactByPhoneNumber(phoneNumber);
+                if (response.startsWith("Error")) {
+                    System.out.println("Η επαφή δεν βρέθηκε");
+                    System.out.println(response.substring(7));
+                    return;
+                }
+                System.out.println("Ανεπιτυχής εισαγωγή");
+                System.out.println(response.substring(7));
+                System.out.println("Εισάγεται το τρέχον ID");
+                long oldId = Long.parseLong(getToken());
+                System.out.println("Παρακαλώ εισάγετε νέο όνομα");
+                firstname = getToken();
+                System.out.println("Παρακαλώ εισάγετε νέο επώνυμο");
+                lastname = getToken();
+                System.out.println("Παρακαλώ εισάγετε νέο τηλεφωνικό αριθμό");
+                phoneNumber = getToken();
+                MobileContactUpdateDTO updateDTO = new MobileContactUpdateDTO(oldId, firstname, lastname, phoneNumber);
+                response = controller.updateContact(updateDTO);
+                System.out.println(response);
                 break;
             case "3":
-                System.out.println("Παρακαλώ εισάγετε το τηλέφωνο της επαφής που θέλετε να διαγράψετε");
-                phoneNumber = getToken();
-                response = controller.deleteContactByPhoneNumber(phoneNumber);
+                System.out.println("Παρακαλώ εισάγετε τον κωδικό επαφής που θέλετε να διαγράψετε");
+                id = Long.parseLong(getToken());
+                response = controller.deleteContactById(id);
                 if (response.startsWith("OK")) {
                     System.out.println("Επιτυχής διαγραφή");
                     System.out.println(response.substring(3));
@@ -73,9 +94,9 @@ public class Main {
                 }
                 break;
             case "4":
-                System.out.println("Παρακαλώ εισάγετε το τηλέφωνο της επαφής που θέλετε να αναζητήσετε");
-                phoneNumber = getToken();
-                response = controller.getContactByPhoneNumber(phoneNumber);
+                System.out.println("Παρακαλώ εισάγετε τον κωδικό επαφής που θέλετε να αναζητήσετε");
+                id = Long.parseLong(getToken());
+                response = controller.deleteContactById(id);
                 if (response.startsWith("OK")) {
                     System.out.println("Επιτυχής αναζήτηση");
                     System.out.println(response.substring(3));
@@ -86,11 +107,14 @@ public class Main {
                 }
                 break;
             case "5":
-                //
+                List<String> mobileContracts = controller.getAllContacts();
+                if (mobileContracts.isEmpty()) {
+                    System.out.println("Δεν υπάρχουν επαφές");
+                }
+                mobileContracts.forEach(System.out::println);
                 break;
             default:
-                //
-                break;
+                System.out.println("Λάθος επιλογή");
         }
     }
 
